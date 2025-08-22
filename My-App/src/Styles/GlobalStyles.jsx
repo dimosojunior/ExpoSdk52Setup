@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text,Dimensions, View, Button,Platform } from 'react-native';
 
 //TwinsMicrofinanceheader
+//ModalView
 
 const {height, width} = Dimensions.get('window');
 

@@ -68,7 +68,10 @@ export default function Header({ title }) {
     <>{!fontsLoaded ? (<View/>):(
 
 
-    <View style={{ backgroundColor: '#015d68', marginBottom: 10 }}>
+    <View style={{ backgroundColor: '#015d68', 
+    marginBottom: 10,
+    marginTop:20,
+     }}>
       <View
         style={{
           paddingHorizontal: 12,
