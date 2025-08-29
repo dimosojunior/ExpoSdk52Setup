@@ -531,7 +531,7 @@ const CartCard = ({item, index}) => {
  
   onPress={() =>
     router.push({
-      pathname: "/(main)/TaarifaZaWakulima/Delete-Taarifa-Za-Wakulima",
+      pathname: "/(Screens)/TaarifaZaWakulima/Delete-Taarifa-Za-Wakulima",
       params: { ...item, postId: item.id },
     })
   } 
@@ -565,7 +565,7 @@ const CartCard = ({item, index}) => {
    // onPress={() => navigation.navigate("Update Taarifa Za Wakulima", { ...item, postId: item.id } )}
    onPress={() =>
     router.push({
-      pathname: "/(main)/TaarifaZaWakulima/Update-Taarifa-Za-Wakulima",
+      pathname: "/(Screens)/TaarifaZaWakulima/Update-Taarifa-Za-Wakulima",
       params: { ...item, postId: item.id },
     })
   } 
@@ -942,7 +942,7 @@ keyboardShouldPersistTaps="handled"
       
      onPress={() =>
     router.push({
-      pathname: "/(main)/Farmers/update-farmer",
+      pathname: "/(Screens)/Farmers/update-farmer",
       params: {
         postId,
         id,
@@ -1296,7 +1296,7 @@ keyboardShouldPersistTaps="handled"
 
                   onPress={() =>
     router.push({
-      pathname: "/(main)/StocksCollection/Add-Taarifa-Za-Wakulima",
+      pathname: "/(Screens)/StocksCollection/Add-Taarifa-Za-Wakulima",
       params: {
         postId,
         id,
@@ -1370,7 +1370,7 @@ keyboardShouldPersistTaps="handled"
 
          onPress={() =>
     router.push({
-      pathname: "/(main)/StocksCollection/Add-Stocks-Collection",
+      pathname: "/(Screens)/StocksCollection/Add-Stocks-Collection",
       params: {
         postId,
         id,

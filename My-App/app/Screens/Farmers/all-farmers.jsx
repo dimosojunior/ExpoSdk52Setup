@@ -372,7 +372,7 @@ const CartCard = ({item, index}) => {
           <TouchableOpacity
   onPress={() =>
     router.push({
-      pathname: "/(main)/Farmers/farmer-detail",
+      pathname: "/(Screens)/Farmers/farmer-detail",
       params: { ...item,
        postId: item.id,
        Education: JSON.stringify(item.Education), // serialize object

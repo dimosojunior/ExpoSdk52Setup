@@ -667,7 +667,7 @@ useEffect(() => {
         setYear('');
 
        // navigation.goBack();
-       router.push("/(main)/Farmers/all-farmers");
+       router.push("/(Screens)/Farmers/all-farmers");
         
 
       }).catch(error => {

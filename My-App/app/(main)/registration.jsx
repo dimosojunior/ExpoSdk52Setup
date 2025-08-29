@@ -11,12 +11,12 @@ import React, {useState,useRef,useCallback, useEffect, useContext} from 'react';
 
 
 
-//import useFetch from '../useFetch';
+//import useFetch from '../../useFetch';
 import { useFonts } from 'expo-font';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
-// import theme from '../theme/theme';
-// import themeContext from '../theme/themeContext';
+// import theme from '../../theme/theme';
+// import themeContext from '../../theme/themeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {MaterialIcons,Entypo,MaterialCommunityIcons,FontAwesome5, Ionicons,Feather,AntDesign, FontAwesome} from '@expo/vector-icons';
@@ -28,16 +28,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 const { width, height } = Dimensions.get('window');
 
 
-import LotterViewScreen from '../src/Screens/LotterViewScreen';
+import LotterViewScreen from '../../src/Screens/LotterViewScreen';
 
 
-import COLORS  from '../src/constants/colors';
-import { EndPoint } from "../src/constants/links";
-import MinorHeader from '../src/Headers/MinorHeader';
+import COLORS  from '../../src/constants/colors';
+import { EndPoint } from "../../src/constants/links";
+import MinorHeader from '../../src/Headers/MinorHeader';
 
-//import Header from '../../components/Header';
-import Header from '../src/Headers/Header';
-import {globalStyles} from '../src/Styles/GlobalStyles';
+//import Header from '../../../../components/Header';
+import Header from '../../src/Headers/Header';
+import {globalStyles} from '../../src/Styles/GlobalStyles';
 
 import Checkbox from 'expo-checkbox'; // Make sure to install this package
 
@@ -54,12 +54,12 @@ const OtherUserRegistration = () => {
 
   let [fontsLoaded] = useFonts({
     
-    'Bold': require('../assets/fonts/Poppins-Bold.ttf'),
-    'Medium': require('../assets/fonts/Poppins-Medium.ttf'),
-    'SemiBold': require('../assets/fonts/Poppins-SemiBold.ttf'),
-    'Regular': require('../assets/fonts/Poppins-Regular.ttf'),
-    'Thin': require('../assets/fonts/Poppins-Thin.ttf'),
-    'Light': require('../assets/fonts/Poppins-Light.ttf'),
+    'Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
+    'Medium': require('../../assets/fonts/Poppins-Medium.ttf'),
+    'SemiBold': require('../../assets/fonts/Poppins-SemiBold.ttf'),
+    'Regular': require('../../assets/fonts/Poppins-Regular.ttf'),
+    'Thin': require('../../assets/fonts/Poppins-Thin.ttf'),
+    'Light': require('../../assets/fonts/Poppins-Light.ttf'),
     
     
   
@@ -383,7 +383,7 @@ console.log("weell");
                 
                 {/* Logo & Company Info */}
                 <View style={styles.logoContainer}>
-                    <Image source={require('../assets/icon.png')} style={styles.logo} />
+                    <Image source={require('../../assets/icon.png')} style={styles.logo} />
                     <Text style={styles.companyName}>AgriHub Tanzania</Text>
                     <Text style={styles.description}>Welcome back! Please register to continue.</Text>
                 </View>
@@ -694,7 +694,7 @@ console.log("weell");
                 contentContainerStyle={globalStyles.alertContainer}
                 customView={
                   <View style={globalStyles.alertContent}>
-                    <Image source={require('../assets/icon.png')} style={globalStyles.alertImage} />
+                    <Image source={require('../../assets/icon.png')} style={globalStyles.alertImage} />
                     <Text style={globalStyles.alertTitle}>AgriHub Tanzania</Text>
                     <Text style={globalStyles.alertMessage}>{alertMessage}</Text>
                   </View>

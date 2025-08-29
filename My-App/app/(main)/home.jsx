@@ -50,7 +50,7 @@ import {globalStyles} from '../../src/Styles/GlobalStyles';
 //     { id: '5', title: 'Malipo', image: require('../../assets/tz.jpg') },
 // ];
 const contents = [
-    { id: '1', title: 'Farmers', icon: 'user-circle-o', screen: '/(main)/Farmers/all-farmers' },
+    { id: '1', title: 'Farmers', icon: 'user-circle-o', screen: '/(Screens)/Farmers/all-farmers' },
     { id: '2', title: 'Transporters', icon: 'truck', screen: 'All Transporters' },
 
 

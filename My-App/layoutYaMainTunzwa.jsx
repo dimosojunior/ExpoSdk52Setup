@@ -1,158 +1,114 @@
-// app/_layout.jsx
-//DrawerItemList
+// app/(main)/_layout.jsx
 import {
   StyleSheet,
-  Platform,
-  TextInput,
-  ActivityIndicator,
-  Pressable,
-  Text,
-  Animated,
   ScrollView,
   View,
   Image,
-  Button,
-  FlatList,
+  Text,
   TouchableOpacity,
   Modal,
-  TouchableWithoutFeedback,
-  Keyboard,
   Dimensions,
-  KeyboardAvoidingView,
   Alert,
   Linking,
-} from 'react-native';
-import React, { useState, useRef, useCallback, useEffect, useContext } from 'react';
+} from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import { Drawer } from "expo-router/drawer";
+import { FontAwesome } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { StatusBar } from "expo-status-bar";
+import { UserContext } from "../../src/context/UserContext";
+import { EndPoint } from "../../src/constants/links";
+import { useFonts } from "expo-font";
+import { useRouter } from "expo-router";
 
-import { Drawer } from 'expo-router/drawer';
 import { DrawerItemList } from '@react-navigation/drawer';
 
-import { UserProvider, UserContext } from '../src/context/UserContext';
+const { width } = Dimensions.get("window");
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import {
-  MaterialIcons,
-  Entypo,
-  MaterialCommunityIcons,
-  FontAwesome5,
-  Ionicons,
-  Feather,
-  AntDesign,
-  FontAwesome,
-} from '@expo/vector-icons';
-
-import { useRouter } from 'expo-router';
-
-import COLORS from '../src/constants/colors';
-import { EndPoint } from '../src/constants/links';
-import MinorHeader from '../src/Headers/MinorHeader';
-import Header from '../src/Headers/Header';
-import { globalStyles } from '../src/Styles/GlobalStyles';
-
-import { useFonts } from 'expo-font';
-import AwesomeAlert from 'react-native-awesome-alerts';
-import { StatusBar } from 'expo-status-bar';
-
-const { width } = Dimensions.get('window');
-
-// 🔹 Root layout imefungwa ndani ya UserProvider
-export default function RootLayout() {
-  return (
-    <UserProvider>
-      <MainLayout />
-    </UserProvider>
-  );
-}
-
-function MainLayout() {
+export default function MainLayout() {
   const router = useRouter();
+  const { userData, userToken, setUserData, setUserToken } =
+    useContext(UserContext);
+
   const [modalVisible, setModalVisible] = useState(false);
 
-  const { userData, userToken, setUserData, setUserToken } = useContext(UserContext);
-
-  // fonts
   let [fontsLoaded] = useFonts({
-    Bold: require('../assets/fonts/Poppins-Bold.ttf'),
-    Medium: require('../assets/fonts/Poppins-Medium.ttf'),
-    SemiBold: require('../assets/fonts/Poppins-SemiBold.ttf'),
-    Regular: require('../assets/fonts/Poppins-Regular.ttf'),
-    Thin: require('../assets/fonts/Poppins-Thin.ttf'),
-    Light: require('../assets/fonts/Poppins-Light.ttf'),
+    Bold: require("../../assets/fonts/Poppins-Bold.ttf"),
+    Medium: require("../../assets/fonts/Poppins-Medium.ttf"),
+    SemiBold: require("../../assets/fonts/Poppins-SemiBold.ttf"),
+    Regular: require("../../assets/fonts/Poppins-Regular.ttf"),
+    Thin: require("../../assets/fonts/Poppins-Thin.ttf"),
+    Light: require("../../assets/fonts/Poppins-Light.ttf"),
   });
-
-  // ✅ Version check (kama App.js ya zamani)
-  const checkForUpdate = async () => {
-    try {
-      const response = await fetch(EndPoint + '/LatestVersionView/');
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-      const data = await response.json();
-      const latestVersion = data.latest_version;
-
-      // const currentVersion = Application.nativeApplicationVersion;
-      const currentVersion = '2'; // hardcoded kama ilivyokuwa
-
-      if (currentVersion < latestVersion) {
-        Alert.alert(
-          'New Version of AgriHub Tanzania',
-          'The new version of AgriHub Tanzania is now available on the Play store. Please download the latest version to access new features and services',
-          [
-            {
-              text: 'Download Now',
-              onPress: () =>
-                Linking.openURL('https://play.google.com/store/apps/details?id=ttpc.AgriHub'),
-            },
-            { text: 'Later', style: 'cancel' },
-          ]
-        );
-      }
-    } catch (error) {
-      console.error('Error checking for update:', error.message);
-    }
-  };
 
   useEffect(() => {
     checkForUpdate();
   }, []);
 
-  // ✅ Logout (expo-router)
+  const checkForUpdate = async () => {
+    try {
+      const response = await fetch(EndPoint + "/LatestVersionView/");
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      const latestVersion = data.latest_version;
+      const currentVersion = "2";
+      if (currentVersion < latestVersion) {
+        Alert.alert(
+          "New Version of AgriHub Tanzania",
+          "The new version of AgriHub Tanzania is now available on the Play store. Please download it.",
+          [
+            {
+              text: "Download Now",
+              onPress: () =>
+                Linking.openURL(
+                  "https://play.google.com/store/apps/details?id=ttpc.AgriHub"
+                ),
+            },
+            { text: "Later", style: "cancel" },
+          ]
+        );
+      }
+    } catch (error) {
+      console.error("Error checking for update:", error.message);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       if (!userToken) {
         setModalVisible(false);
-        router.replace('/(auth)');
+        router.replace("/(auth)");
         return;
       }
 
-      const response = await axios.post(EndPoint + `/Account/logout_user/`, null, {
-        headers: {
-          Authorization: `Token ${userToken}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.post(
+        EndPoint + `/Account/logout_user/`,
+        null,
+        {
+          headers: {
+            Authorization: `Token ${userToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status === 200) {
-        await AsyncStorage.removeItem('userToken');
-        await AsyncStorage.removeItem('userData');
+        await AsyncStorage.removeItem("userToken");
+        await AsyncStorage.removeItem("userData");
         setUserData(null);
         setUserToken(null);
         setModalVisible(false);
-        router.replace('/(auth)'); // back to signin
-      } else {
-        console.log('Failed to logout');
+        router.replace("/(auth)");
       }
     } catch (error) {
-      console.error('Error while logging out:', error);
-      // hata kama kuna error, mpeleke user kwenye signin ili asibaki locked
+      console.error("Error while logging out:", error);
       setModalVisible(false);
-      router.replace('/(auth)');
+      router.replace("/(auth)");
     }
   };
 
-  if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color="green" style={{ flex: 1 }} />;
-  }
+  if (!fontsLoaded) return null;
 
   return (
     <View style={{ flex: 1 }}>
@@ -190,7 +146,7 @@ function MainLayout() {
                 }}
               >
                 <Image
-                  source={require('../assets/icon.png')}
+                  source={require('../../assets/icon.png')}
                   style={{
                     height: 80,
                     width: 80,
@@ -289,57 +245,42 @@ function MainLayout() {
           </View>
         )}
       >
-        {/* (auth) hidden */}
-        <Drawer.Screen
-          name="(auth)"
-          options={{
-            drawerLabel: 'Signin',
-            title: 'Signin',
-            drawerIcon: () => <FontAwesome name="sign-in" size={20} color="white" />,
-            drawerItemStyle: { display: 'none' },
-          }}
-        />
+  {/* MANUAL SCREENS ONLY */}
+  <Drawer.Screen
+    name="home"
+    options={{
+      drawerLabel: "Home",
+      title: "Home",
+      drawerIcon: () => <FontAwesome name="home" size={20} color="white" />,
+    }}
+  />
 
-        {/* ✅ Home visible only if user is admin */}
-        {userData?.is_admin && (
-          <Drawer.Screen
-            name="(main)"
-            options={{
-              drawerLabel: 'Home',
-              title: 'Home',
-              drawerIcon: () => <FontAwesome name="home" size={20} color="white" />,
-            }}
-          />
-        )}
+  {userData?.is_admin && (
+    <Drawer.Screen
+      name="payment"
+      options={{
+        drawerLabel: "Payment",
+        title: "Payment",
+        drawerIcon: () => (
+          <FontAwesome name="users" size={20} color="white" />
+        ),
+      }}
+    />
+  )}
 
-        {/* ✅ Payment visible only if admin */}
-        {userData?.is_admin && (
-          <Drawer.Screen
-            name="payment"
-            options={{
-              drawerLabel: 'Payment',
-              title: 'Payment',
-              drawerIcon: () => <FontAwesome name="users" size={20} color="white" />,
-            }}
-          />
-        )}
+  <Drawer.Screen
+    name="registration"
+    options={{
+      drawerLabel: "User Registration",
+      title: "User Registration",
+      drawerIcon: () => (
+        <FontAwesome name="user-o" size={20} color="white" />
+      ),
+    }}
+  />
+</Drawer>
 
-        {/* ✅ Registration always visible */}
         
-        <Drawer.Screen
-          name="registration"
-          options={{
-            drawerLabel: 'User Registration',
-            title: 'User Registration',
-            drawerIcon: () => <FontAwesome name="user-o" size={20} color="white" />,
-          }}
-        />
-        
-
-
-
-      </Drawer>
-
       <StatusBar backgroundColor="white" style="dark" />
     </View>
   );
@@ -347,32 +288,33 @@ function MainLayout() {
 
 const styles = StyleSheet.create({
   logoutBtn: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 16,
     left: 16,
-    backgroundColor: '#063164',
+    backgroundColor: "#063164",
     padding: 12,
     borderRadius: 8,
-    width: '50%',
-    borderColor: 'white',
+    width: "50%",
+    borderColor: "white",
     borderWidth: 1,
   },
   logoutText: {
-    color: '#fff',
-    fontFamily: 'Light',
-    textAlign: 'center',
+    color: "#fff",
+    fontFamily: "Light",
+    textAlign: "center",
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.35)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0,0,0,0.35)",
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 16,
   },
-  // force modal card to center nicely even if globalStyles.ModalView has offsets
-  modalCardFix: {
-    alignSelf: 'center',
-    width: '85%',
+  modalCard: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    width: "85%",
     maxWidth: 450,
   },
 });
